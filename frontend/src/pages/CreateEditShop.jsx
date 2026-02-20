@@ -9,6 +9,7 @@ import axios from 'axios';
 import { serverUrl } from '../App';
 import { setMyShopData } from '../redux/ownerSlice';
 import { ClipLoader } from 'react-spinners';
+import { motion } from 'framer-motion';
 function CreateEditShop() {
     const navigate = useNavigate()
     const { myShopData } = useSelector(state => state.owner)
@@ -49,20 +50,43 @@ function CreateEditShop() {
         }
        }
     return (
-        <div className='flex justify-center flex-col items-center p-6 bg-gradient-to-br from-orange-50 relative to-white min-h-screen'>
-            <div className='absolute top-[20px] left-[20px] z-[10] mb-[10px]' onClick={() => navigate("/")}>
+        <div className='flex justify-center flex-col items-center p-6 bg-linear-to-br from-[#fff3e9] via-[#fff9f6] to-[#ffe1d2] relative min-h-screen'>
+            <motion.div
+                className='absolute top-[20px] left-[20px] z-10 mb-[10px] cursor-pointer'
+                onClick={() => navigate("/")}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+            >
                 <IoIosArrowRoundBack size={35} className='text-[#ff4d2d]' />
-            </div>
+            </motion.div>
 
-            <div className='max-w-lg w-full bg-white shadow-xl rounded-2xl p-8 border border-orange-100'>
-                <div className='flex flex-col items-center mb-6'>
-                    <div className='bg-orange-100 p-4 rounded-full mb-4'>
+            <motion.div
+                className='max-w-lg w-full bg-white/95 backdrop-blur shadow-2xl rounded-2xl p-8 border border-orange-100'
+                initial={{ opacity: 0, y: 30, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+            >
+                <motion.div
+                    className='flex flex-col items-center mb-6'
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.1 }}
+                >
+                    <motion.div
+                        className='bg-orange-100 p-4 rounded-full mb-4'
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+                    >
                         <FaUtensils className='text-[#ff4d2d] w-16 h-16' />
-                    </div>
+                    </motion.div>
                     <div className="text-3xl font-extrabold text-gray-900">
                         {myShopData ? "Edit Shop" : "Add Shop"}
                     </div>
-                </div>
+                </motion.div>
                 <form className='space-y-5' onSubmit={handleSubmit}>
                     <div>
                         <label className='block text-sm font-medium text-gray-700 mb-1'>Name</label>
@@ -96,12 +120,16 @@ function CreateEditShop() {
                         <input type="text" placeholder='Enter Shop Address' className='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500' onChange={(e)=>setAddress(e.target.value)}
                         value={address}/> 
                     </div>
-                    <button className='w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-200 cursor-pointer' disabled={loading}>
+                    <motion.button
+                        className='w-full bg-[#ff4d2d] text-white px-6 py-4 rounded-lg font-semibold shadow-lg'
+                        disabled={loading}
+                        whileHover={{ scale: loading ? 1 : 1.02, boxShadow: loading ? '' : '0 10px 25px rgba(255,77,45,0.4)' }}
+                        whileTap={{ scale: loading ? 1 : 0.98 }}
+                    >
                         {loading?<ClipLoader size={20} color='white'/>:"Save"}
-                    
-                    </button>
+                    </motion.button>
                 </form>
-            </div>
+            </motion.div>
                 
                 
 

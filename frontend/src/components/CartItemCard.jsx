@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import { CiTrash } from "react-icons/ci";
 import { useDispatch } from 'react-redux';
 import { removeCartItem, updateQuantity } from '../redux/userSlice';
+import { motion } from 'framer-motion';
 function CartItemCard({data}) {
     const dispatch=useDispatch()
     const handleIncrease=(id,currentQty)=>{
@@ -16,29 +17,56 @@ function CartItemCard({data}) {
         
     }
   return (
-    <div className='flex items-center justify-between bg-white p-4 rounded-xl shadow border'>
+    <motion.div
+      className='flex items-center justify-between glass-card p-4 rounded-xl shadow-xl border border-white/40'
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 20 }}
+      whileHover={{ y: -2, boxShadow: '0 15px 35px rgba(15,23,42,0.15)' }}
+      transition={{ duration: 0.2 }}
+    >
       <div className='flex items-center gap-4'>
-        <img src={data.image} alt="" className='w-20 h-20 object-cover rounded-lg border'/>
+        <motion.img
+          src={data.image}
+          alt=""
+          className='w-20 h-20 object-cover rounded-xl border-2 border-white/40 glass-strong'
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: 'spring', stiffness: 300 }}
+        />
         <div>
-            <h1 className='font-medium text-gray-800'>{data.name}</h1>
-            <p className='text-sm text-gray-500'>₹{data.price} x {data.quantity}</p>
-            <p className="font-bold text-gray-900">₹{data.price*data.quantity}</p>
+            <h1 className='font-bold text-gray-800'>{data.name}</h1>
+            <p className='text-sm text-gray-600'>₹{data.price} x {data.quantity}</p>
+            <p className="font-bold text-gray-900 text-lg">₹{data.price*data.quantity}</p>
         </div>
       </div>
       <div className='flex items-center gap-3'>
-        <button className='p-2 cursor-pointer bg-gray-100 rounded-full hover:bg-gray-200' onClick={()=>handleDecrease(data.id,data.quantity)}>
-        <FaMinus size={12}/>
-        </button>
-        <span>{data.quantity}</span>
-        <button className='p-2 cursor-pointer bg-gray-100 rounded-full hover:bg-gray-200'  onClick={()=>handleIncrease(data.id,data.quantity)}>
-        <FaPlus size={12}/>
-        </button>
-        <button className="p-2 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
- onClick={()=>dispatch(removeCartItem(data.id))}>
-<CiTrash size={18}/>
-        </button>
+        <motion.button
+          className='p-2 cursor-pointer glass-strong rounded-full border border-white/30'
+          onClick={()=>handleDecrease(data.id,data.quantity)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <FaMinus size={12} className='text-gray-700'/>
+        </motion.button>
+        <span className='font-bold min-w-[20px] text-center text-gray-800'>{data.quantity}</span>
+        <motion.button
+          className='p-2 cursor-pointer glass-strong rounded-full border border-white/30'
+          onClick={()=>handleIncrease(data.id,data.quantity)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <FaPlus size={12} className='text-gray-700'/>
+        </motion.button>
+        <motion.button
+          className="p-2 glass-strong rounded-full border border-red-200/50 text-red-600"
+          onClick={()=>dispatch(removeCartItem(data.id))}
+          whileHover={{ scale: 1.1, rotate: 10 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <CiTrash size={18}/>
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   )
 }
 

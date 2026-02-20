@@ -84,16 +84,21 @@ setRightButton(element.scrollLeft+element.clientWidth<element.scrollWidth)
       <Nav />
 
       {searchItems && searchItems.length>0 && (
-        <div className='w-full max-w-6xl flex flex-col gap-5 items-start p-5 bg-white shadow-md rounded-2xl mt-4'>
-<h1 className='text-gray-900 text-2xl sm:text-3xl font-semibold border-b border-gray-200 pb-2'>
-  Search Results
-</h1>
-<div className='w-full h-auto flex flex-wrap gap-6 justify-center'>
-  {searchItems.map((item)=>(
-    <FoodCard data={item} key={item._id}/>
-  ))}
-</div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          className='w-full max-w-6xl flex flex-col gap-5 items-start p-5 glass-strong shadow-xl rounded-2xl mt-4 border border-white/40'
+        >
+          <h1 className='text-gray-900 text-2xl sm:text-3xl font-bold border-b-2 border-white/30 pb-3'>
+            Search Results
+          </h1>
+          <div className='w-full h-auto flex flex-wrap gap-6 justify-center'>
+            {searchItems.map((item)=>(
+              <FoodCard data={item} key={item._id}/>
+            ))}
+          </div>
+        </motion.div>
       )}
 
       <div className="w-full max-w-6xl flex flex-col gap-5 items-start p-[10px]">

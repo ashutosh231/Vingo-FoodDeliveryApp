@@ -8,6 +8,7 @@
   },
   "author": "Virtual code",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.7.0",

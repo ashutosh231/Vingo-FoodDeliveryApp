@@ -14,6 +14,7 @@ import { FaMobileScreenButton } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 import { serverUrl } from '../App';
 import { addMyOrder, setTotalAmount } from '../redux/userSlice';
+import { motion } from 'framer-motion';
 function RecenterMap({ location }) {
   if (location.lat && location.lon) {
     const map = useMap()
@@ -134,21 +135,70 @@ const openRazorpayWindow=(orderId,razorOrder)=>{
     setAddressInput(address)
   }, [address])
   return (
-    <div className='min-h-screen bg-[#fff9f6] flex items-center justify-center p-6'>
-      <div className=' absolute top-[20px] left-[20px] z-[10]' onClick={() => navigate("/")}>
+    <div className='min-h-screen bg-linear-to-br from-[#fff3e9] via-[#fff9f6] to-[#ffe1d2] flex items-center justify-center p-6'>
+      <motion.div
+        className='absolute top-[20px] left-[20px] z-10 cursor-pointer'
+        onClick={() => navigate("/")}
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
         <IoIosArrowRoundBack size={35} className='text-[#ff4d2d]' />
-      </div>
-      <div className='w-full max-w-[900px] bg-white rounded-2xl shadow-xl p-6 space-y-6'>
-        <h1 className='text-2xl font-bold text-gray-800'>Checkout</h1>
+      </motion.div>
+      <motion.div
+        className='w-full max-w-[900px] glass-strong rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 border border-white/40'
+        initial={{ opacity: 0, y: 30, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+      >
+        <motion.h1
+          className='text-3xl font-bold text-gray-800 mb-2'
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          Checkout
+        </motion.h1>
 
-        <section>
-          <h2 className='text-lg font-semibold mb-2 flex items-center gap-2 text-gray-800'><IoLocationSharp className='text-[#ff4d2d]' /> Delivery Location</h2>
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          <h2 className='text-lg font-semibold mb-3 flex items-center gap-2 text-gray-800'><IoLocationSharp className='text-[#ff4d2d]' /> Delivery Location</h2>
           <div className='flex gap-2 mb-3'>
-            <input type="text" className='flex-1 border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#ff4d2d]' placeholder='Enter Your Delivery Address..' value={addressInput} onChange={(e) => setAddressInput(e.target.value)} />
-            <button className='bg-[#ff4d2d] hover:bg-[#e64526] text-white px-3 py-2 rounded-lg flex items-center justify-center' onClick={getLatLngByAddress}><IoSearchOutline size={17} /></button>
-            <button className='bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg flex items-center justify-center' onClick={getCurrentLocation}><TbCurrentLocation size={17} /></button>
+            <input
+                type="text"
+                className='flex-1 glass border-2 border-white/30 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#ff4d2d]/50 focus:border-[#ff4d2d]/50 transition-all'
+                placeholder='Enter Your Delivery Address..'
+                value={addressInput}
+                onChange={(e) => setAddressInput(e.target.value)}
+            />
+            <motion.button
+              className='bg-[#ff4d2d] text-white px-4 py-3 rounded-lg flex items-center justify-center shadow-lg'
+              onClick={getLatLngByAddress}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <IoSearchOutline size={17} />
+            </motion.button>
+            <motion.button
+              className='bg-blue-500 text-white px-4 py-3 rounded-lg flex items-center justify-center shadow-lg'
+              onClick={getCurrentLocation}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <TbCurrentLocation size={17} />
+            </motion.button>
           </div>
-          <div className='rounded-xl border overflow-hidden'>
+          <motion.div
+            className='rounded-xl border-2 border-gray-200 overflow-hidden shadow-lg'
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+          >
             <div className='h-64 w-full flex items-center justify-center'>
               <MapContainer
                 className={"w-full h-full"}
@@ -165,69 +215,113 @@ const openRazorpayWindow=(orderId,razorOrder)=>{
 
               </MapContainer>
             </div>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
-        <section>
-          <h2 className='text-lg font-semibold mb-3 text-gray-800'>Payment Method</h2>
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+        >
+          <h2 className='text-lg font-semibold mb-4 text-gray-800'>Payment Method</h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-            <div className={`flex items-center gap-3 rounded-xl border p-4 text-left transition ${paymentMethod === "cod" ? "border-[#ff4d2d] bg-orange-50 shadow" : "border-gray-200 hover:border-gray-300"
-              }`} onClick={() => setPaymentMethod("cod")}>
-
-              <span className='inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-100'>
+            <motion.div
+              className={`flex items-center gap-3 rounded-xl border-2 p-4 text-left cursor-pointer ${
+                paymentMethod === "cod"
+                  ? "border-[#ff4d2d] bg-orange-50 shadow-lg"
+                  : "border-gray-200 hover:border-gray-300 bg-white"
+              }`}
+              onClick={() => setPaymentMethod("cod")}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              <span className='inline-flex h-12 w-12 items-center justify-center rounded-full bg-green-100'>
                 <MdDeliveryDining className='text-green-600 text-xl' />
               </span>
-              <div >
-                <p className='font-medium text-gray-800'>Cash On Delivery</p>
+              <div>
+                <p className='font-semibold text-gray-800'>Cash On Delivery</p>
                 <p className='text-xs text-gray-500'>Pay when your food arrives</p>
               </div>
-
-            </div>
-            <div className={`flex items-center gap-3 rounded-xl border p-4 text-left transition ${paymentMethod === "online" ? "border-[#ff4d2d] bg-orange-50 shadow" : "border-gray-200 hover:border-gray-300"
-              }`} onClick={() => setPaymentMethod("online")}>
-
-              <span className='inline-flex h-10 w-10 items-center justify-center rounded-full bg-purple-100'>
+            </motion.div>
+            <motion.div
+              className={`flex items-center gap-3 rounded-xl border-2 p-4 text-left cursor-pointer ${
+                paymentMethod === "online"
+                  ? "border-[#ff4d2d] bg-orange-50 shadow-lg"
+                  : "border-gray-200 hover:border-gray-300 bg-white"
+              }`}
+              onClick={() => setPaymentMethod("online")}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 300 }}
+            >
+              <span className='inline-flex h-12 w-12 items-center justify-center rounded-full bg-purple-100'>
                 <FaMobileScreenButton className='text-purple-700 text-lg' />
               </span>
-              <span className='inline-flex h-10 w-10 items-center justify-center rounded-full bg-blue-100'>
+              <span className='inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-100'>
                 <FaCreditCard className='text-blue-700 text-lg' />
               </span>
               <div>
-                <p className='font-medium text-gray-800'>UPI / Credit / Debit Card</p>
+                <p className='font-semibold text-gray-800'>UPI / Credit / Debit Card</p>
                 <p className='text-xs text-gray-500'>Pay Securely Online</p>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+        >
           <h2 className='text-lg font-semibold mb-3 text-gray-800'>Order Summary</h2>
-<div className='rounded-xl border bg-gray-50 p-4 space-y-2'>
-{cartItems.map((item,index)=>(
-  <div key={index} className='flex justify-between text-sm text-gray-700'>
-<span>{item.name} x {item.quantity}</span>
-<span>₹{item.price*item.quantity}</span>
-  </div>
- 
-))}
- <hr className='border-gray-200 my-2'/>
-<div className='flex justify-between font-medium text-gray-800'>
-  <span>Subtotal</span>
-  <span>{totalAmount}</span>
-</div>
-<div className='flex justify-between text-gray-700'>
-  <span>Delivery Fee</span>
-  <span>{deliveryFee==0?"Free":deliveryFee}</span>
-</div>
-<div className='flex justify-between text-lg font-bold text-[#ff4d2d] pt-2'>
-    <span>Total</span>
-  <span>{AmountWithDeliveryFee}</span>
-</div>
-</div>
-        </section>
-        <button className='w-full bg-[#ff4d2d] hover:bg-[#e64526] text-white py-3 rounded-xl font-semibold' onClick={handlePlaceOrder}> {paymentMethod=="cod"?"Place Order":"Pay & Place Order"}</button>
+          <motion.div
+            className='rounded-xl glass-card border-2 border-white/40 p-5 space-y-2'
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: 0.5 }}
+          >
+            {cartItems.map((item,index)=>(
+              <motion.div
+                key={index}
+                className='flex justify-between text-sm text-gray-700'
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.2, delay: 0.6 + index * 0.05 }}
+              >
+                <span className='font-medium'>{item.name} x {item.quantity}</span>
+                <span className='font-semibold'>₹{item.price*item.quantity}</span>
+              </motion.div>
+            ))}
+            <hr className='border-gray-300 my-3'/>
+            <div className='flex justify-between font-semibold text-gray-800'>
+              <span>Subtotal</span>
+              <span>₹{totalAmount}</span>
+            </div>
+            <div className='flex justify-between text-gray-700'>
+              <span>Delivery Fee</span>
+              <span className={deliveryFee==0 ? 'text-green-600 font-semibold' : ''}>{deliveryFee==0?"Free":`₹${deliveryFee}`}</span>
+            </div>
+            <hr className='border-gray-300 my-2'/>
+            <div className='flex justify-between text-xl font-bold text-[#ff4d2d] pt-2'>
+              <span>Total</span>
+              <span>₹{AmountWithDeliveryFee}</span>
+            </div>
+          </motion.div>
+        </motion.section>
+        <motion.button
+          className='w-full bg-[#ff4d2d] text-white py-4 rounded-xl font-bold text-lg shadow-xl'
+          onClick={handlePlaceOrder}
+          whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(255,77,45,0.4)' }}
+          whileTap={{ scale: 0.98 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.6 }}
+        >
+          {paymentMethod=="cod"?"Place Order":"Pay & Place Order"}
+        </motion.button>
 
-      </div>
+      </motion.div>
     </div>
   )
 }

@@ -8,6 +8,7 @@ import { FaPlus } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../redux/userSlice';
+import { motion } from 'framer-motion';
 
 function FoodCard({data}) {
 const [quantity,setQuantity]=useState(0)
@@ -41,55 +42,85 @@ const newQty=quantity-1
 }
 
   return (
-    <div className='w-[250px] rounded-2xl border-2 border-[#ff4d2d] bg-white shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col'>
-      <div className='relative w-full h-[170px] flex justify-center items-center bg-white'>
-        <div className='absolute top-3 right-3 bg-white rounded-full p-1 shadow'>{data.foodType=="veg"?<FaLeaf className='text-green-600 text-lg'/>:<FaDrumstickBite className='text-red-600 text-lg'/>}</div>
+    <motion.div
+      className='w-[250px] rounded-2xl border-2 border-white/40 glass-card overflow-hidden flex flex-col'
+      initial={{ opacity: 0, y: 20, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      whileHover={{ y: -8, scale: 1.02, boxShadow: '0 25px 60px rgba(15,23,42,0.25)' }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+    >
+      <div className='relative w-full h-[170px] flex justify-center items-center overflow-hidden'>
+        <motion.div
+          className='absolute top-3 right-3 glass-strong rounded-full p-1.5 shadow-lg z-10 border border-white/40'
+          whileHover={{ scale: 1.1, rotate: 5 }}
+        >
+          {data.foodType=="veg"?<FaLeaf className='text-green-600 text-lg'/>:<FaDrumstickBite className='text-red-600 text-lg'/>}
+        </motion.div>
 
-
-<img src={data.image} alt="" className='w-full h-full object-cover transition-transform duration-300 hover:scale-105'/>
+        <motion.img
+          src={data.image}
+          alt=""
+          className='w-full h-full object-cover'
+          whileHover={{ scale: 1.1 }}
+          transition={{ duration: 0.3 }}
+        />
       </div>
 
-      <div className="flex-1 flex flex-col p-4">
-<h1 className='font-semibold text-gray-900 text-base truncate'>{data.name}</h1>
+      <div className="flex-1 flex flex-col p-4 bg-white/50 backdrop-blur">
+        <h1 className='font-bold text-gray-900 text-base truncate mb-1'>{data.name}</h1>
 
-<div className='flex items-center gap-1 mt-1'>
-{renderStars(data.rating?.average || 0)}
-<span className='text-xs text-gray-500'>
-    {data.rating?.count || 0}
-</span>
-</div>
+        <div className='flex items-center gap-1 mt-1'>
+          {renderStars(data.rating?.average || 0)}
+          <span className='text-xs text-gray-600 font-medium'>
+            ({data.rating?.count || 0})
+          </span>
+        </div>
       </div>
 
-<div className='flex items-center justify-between mt-auto p-3'>
-<span className='font-bold text-gray-900 text-lg'>
-    ₹{data.price}
-</span>
+      <div className='flex items-center justify-between mt-auto p-3 bg-white/60 backdrop-blur border-t border-white/30'>
+        <span className='font-bold text-gray-900 text-xl'>
+          ₹{data.price}
+        </span>
 
-<div className='flex items-center border rounded-full overflow-hidden shadow-sm'>
-<button className='px-2 py-1 hover:bg-gray-100 transition' onClick={handleDecrease}>
-<FaMinus size={12}/>
-</button>
-<span>{quantity}</span>
-<button className='px-2 py-1 hover:bg-gray-100 transition' onClick={handleIncrease}>
-<FaPlus size={12}/>
-</button>
-<button className={`${cartItems.some(i=>i.id==data._id)?"bg-gray-800":"bg-[#ff4d2d]"} text-white px-3 py-2 transition-colors`}  onClick={()=>{
-    quantity>0?dispatch(addToCart({
-          id:data._id,
-          name:data.name,
-          price:data.price,
-          image:data.image,
-          shop:data.shop,
-          quantity,
-          foodType:data.foodType
-})):null}}>
-<FaShoppingCart size={16}/>
-</button>
-</div>
-</div>
-
-
-    </div>
+        <div className='flex items-center glass-strong rounded-full overflow-hidden shadow-md border border-white/40'>
+          <motion.button
+            className='px-2.5 py-1.5 hover:bg-white/50 transition'
+            onClick={handleDecrease}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaMinus size={12}/>
+          </motion.button>
+          <span className='px-2 font-bold min-w-[24px] text-center text-gray-800'>{quantity}</span>
+          <motion.button
+            className='px-2.5 py-1.5 hover:bg-white/50 transition'
+            onClick={handleIncrease}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaPlus size={12}/>
+          </motion.button>
+          <motion.button
+            className={`${cartItems.some(i=>i.id==data._id)?"bg-gray-800":"bg-gradient-to-r from-[#ff4d2d] to-[#e64528]"} text-white px-3 py-2 transition-colors shadow-lg`}
+            onClick={()=>{
+              quantity>0?dispatch(addToCart({
+                id:data._id,
+                name:data.name,
+                price:data.price,
+                image:data.image,
+                shop:data.shop,
+                quantity,
+                foodType:data.foodType
+              })):null
+            }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <FaShoppingCart size={16}/>
+          </motion.button>
+        </div>
+      </div>
+    </motion.div>
   )
 }
 
